@@ -42,7 +42,7 @@ API24/Android 7.0 -> API30/Android 10.0+
 
 # SDK - API Reference :
 
-API reference documentation is published on [apiRTC WebSite](https://dev.apirtc.com/api/reference_apiRTC_Android-SDK)
+API reference documentation is published on [apiRTC WebSite](https://apirtc.github.io/references/apirtc-android-sdk/)
 
 <br/>This demo integrates our SDK which is available on _jcenter_
 
