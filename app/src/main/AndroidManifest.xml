@@ -9,6 +9,9 @@
     <permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <permission android:name="android.permission.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION" />
+    <permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -17,6 +20,9 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature
@@ -24,12 +30,15 @@
         android:required="true" />
 
     <application
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_apirtc"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_apirtc_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
+        <service android:enabled="true"
+            android:name="com.apizee.apiRTC.screenCapturer.ScreenCapturerService"
+            android:foregroundServiceType="mediaProjection"> </service>
         <activity
             android:name=".TutorialPeertopeerChat"
             android:windowSoftInputMode="adjustPan" />
@@ -44,6 +53,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".TutorialConferencingVideo"
+            android:foregroundServiceType="mediaProjection"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".TutorialUserDataSharing"
@@ -54,7 +64,9 @@
         <activity
             android:name=".TutorialPeertopeerSendFile"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".LobbyActivity">
+        <activity
+            android:name=".LobbyActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -62,6 +74,7 @@
         </activity>
         <activity
             android:name=".VideoCallActivity"
+            android:persistent="true"
             android:configChanges="orientation|screenSize|keyboardHidden" />
     </application>
 

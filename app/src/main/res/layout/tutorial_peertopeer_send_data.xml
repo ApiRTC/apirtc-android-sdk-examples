@@ -89,8 +89,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.1"
                 android:src="@android:drawable/ic_menu_send"
-                android:tint="#FFFFFF"
-                app:backgroundTint="@android:color/transparent" />
+                app:backgroundTint="@android:color/transparent"
+                app:tint="#FFFFFF" />
         </LinearLayout>
 
         <LinearLayout
@@ -147,8 +147,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.1"
                     android:src="@android:drawable/ic_menu_send"
-                    android:tint="#FFFFFF"
-                    app:backgroundTint="@android:color/transparent" />
+                    app:backgroundTint="@android:color/transparent"
+                    app:tint="#FFFFFF" />
             </LinearLayout>
 
         </LinearLayout>

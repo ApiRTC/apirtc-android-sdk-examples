@@ -1,17 +1,22 @@
 package com.apizee.webrtc.apiRTC
 
 import android.Manifest
+import android.annotation.TargetApi
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioManager
+import android.media.projection.MediaProjection
+import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.apizee.apiRTC.*
@@ -26,12 +31,15 @@ import com.apizee.apiRTC.Session.Companion.EVENT_ERROR
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_video_call.*
 import org.webrtc.RendererCommon
+import org.webrtc.ScreenCapturerAndroid
 import org.webrtc.SurfaceViewRenderer
+import org.webrtc.VideoCapturer
 import java.util.concurrent.ConcurrentHashMap
 
 
-class VideoCallActivity : AppCompatActivity() {
+class VideoCallActivity : Activity() {
     private var localVideoView: SurfaceViewRenderer? = null
+    private var localScreenView: SurfaceViewRenderer? = null
     private var audioManager: AudioManager? = null
     private var savedMicrophoneState: Boolean? = null
     private var savedSpeakerphoneState: Boolean? = null
@@ -39,12 +47,22 @@ class VideoCallActivity : AppCompatActivity() {
 
     private var ua: UserAgent? = null
     private var localStream: Stream? = null
+    private var localScreenStream: Stream? = null
 
     private var usedSurfaceViewRenderer: ConcurrentHashMap<Stream?, SurfaceViewRenderer?> = ConcurrentHashMap()
     private var freeSurfaceViewRenderer: MutableList<SurfaceViewRenderer> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                    or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                    or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                    or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+        )
         handlePermissions()
     }
 
@@ -209,6 +227,7 @@ class VideoCallActivity : AppCompatActivity() {
     private fun interfaceInit() {
         setContentView(R.layout.activity_video_call)
         localVideoView = findViewById(R.id.pip_video)
+        localScreenView = findViewById(R.id.pip_screen)
 
         // Static provisioning of all available SurfaceViewRenderers.
         // They could be dynamically created too.
@@ -258,6 +277,14 @@ class VideoCallActivity : AppCompatActivity() {
             audioManager?.isSpeakerphoneOn = isChecked
         }
 
+        // Handle screen share on/off
+        switch_screen.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked)
+                startScreenCapture()
+            else
+                removeStreamScreen()
+        }
+
         // Handle chat window
         buttonChat.setOnClickListener {
             val intent = Intent(this, ChatActivity::class.java)
@@ -265,6 +292,35 @@ class VideoCallActivity : AppCompatActivity() {
         }
 
         interfaceCameraInit()
+    }
+
+    private fun createStreamScreen(screenCapturer: VideoCapturer) {
+        ua?.createDisplayMediaStream(null, screenCapturer)
+            ?.then {
+                val stream = it as Stream
+                Log.d(TAG, "Create screen stream OK")
+                // Save local screen stream
+                localScreenStream = stream
+                // Attach stream
+                stream.attachToElement(localScreenView)
+                localScreenView?.visibility = View.VISIBLE
+
+                connectedConversation?.publish(localScreenStream)
+                Log.d(TAG, "Published screen stream")
+                true
+            }?.catch {
+                toast(ToastyType.TOASTY_ERROR, "Create screen stream failed")
+            }
+    }
+
+    private fun removeStreamScreen() {
+        if (localScreenStream == null)
+            return
+        connectedConversation?.unpublish(localScreenStream);
+        localScreenStream?.detachFromElement(localScreenView)
+        localScreenStream?.release()
+        localScreenStream = null
+        localScreenView?.visibility = View.GONE
     }
 
     private fun createStream(audio: Boolean, video: Boolean, videoInputId: String?) {
@@ -373,6 +429,13 @@ class VideoCallActivity : AppCompatActivity() {
         localVideoView?.setZOrderMediaOverlay(true)
         localVideoView?.setEnableHardwareScaler(true)
         localVideoView?.setMirror(false)
+
+        localScreenView?.init(UserAgent.getEglBaseContext(), null)
+        localScreenView?.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
+        localScreenView?.setZOrderMediaOverlay(true)
+        localScreenView?.setEnableHardwareScaler(true)
+        localScreenView?.setMirror(false)
+        localScreenView?.visibility = View.GONE
     }
 
     private enum class ToastyType { TOASTY_ERROR, TOASTY_SUCCESS, TOASTY_INFO }
@@ -391,10 +454,14 @@ class VideoCallActivity : AppCompatActivity() {
     override fun onDestroy() {
         toast(ToastyType.TOASTY_INFO, "Call terminated")
 
+        removeStreamScreen()
+
         localStream?.release()
+        localScreenStream?.release()
 
         ua?.unregister()
         localVideoView?.release()
+        localScreenView?.release()
 
         for ((stream, _) in usedSurfaceViewRenderer) {
             putBackSurfaceViewRenderer(stream)
@@ -407,9 +474,18 @@ class VideoCallActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    override fun onUserLeaveHint() {
+        Log.d(TAG, "onUserLeaveHint()")
+    }
+
     override fun onStop() {
         Log.d(TAG, "onStop()")
         super.onStop()
+    }
+
+    override fun onResume() {
+        Log.d(TAG, "onResume()")
+        super.onResume()
     }
 
     private fun joinConference() {
@@ -505,6 +581,7 @@ class VideoCallActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Log.w(TAG, "onRequestPermissionsResult: $requestCode $permissions $grantResults")
         when (requestCode) {
             CAMERA_AUDIO_PERMISSION_REQUEST -> {
@@ -522,8 +599,45 @@ class VideoCallActivity : AppCompatActivity() {
         }
     }
 
+    @TargetApi(21)
+    fun startScreenCapture() {
+        val mediaProjectionManager = getSystemService(
+            Context.MEDIA_PROJECTION_SERVICE
+        ) as MediaProjectionManager
+        startActivityForResult(
+            mediaProjectionManager.createScreenCaptureIntent(),
+            CAPTURE_PERMISSION_REQUEST_CODE
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d(TAG, "onActivityResult($requestCode, $resultCode, ...")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == CAPTURE_PERMISSION_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                toast(ToastyType.TOASTY_SUCCESS, "Permission granted to capture the screen")
+                Log.d(TAG, "Permission granted to capture the screen")
+
+                val screenCapturer = ScreenCapturerAndroid(
+                    data, object : MediaProjection.Callback() {
+                        override fun onStop() {
+                            // toast(ToastyType.TOASTY_ERROR, "Capture the screen terminated")
+                            // Log.d(TAG, "Capture the screen terminated")
+                        }
+                    })
+                createStreamScreen(screenCapturer)
+            } else {
+                toast(ToastyType.TOASTY_ERROR, "Permission missing to capture the screen")
+                Log.d(TAG, "Permission missing to capture the screen")
+                switch_screen.isChecked = false
+            }
+        }
+    }
+
     companion object {
         private const val CAMERA_AUDIO_PERMISSION_REQUEST = 1
+        private const val CAPTURE_PERMISSION_REQUEST_CODE = 1221
         private const val TAG = "VideoCallActivity"
 
         private var connectedConversation: Conversation? = null

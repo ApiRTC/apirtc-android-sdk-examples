@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/topLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +23,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -30,7 +31,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video2"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -38,7 +39,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video5"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -46,7 +47,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video10"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -60,7 +61,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video3"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -68,7 +69,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video4"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -76,7 +77,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video6"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -84,7 +85,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video11"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -98,7 +99,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video7"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -106,7 +107,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video8"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -114,7 +115,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video9"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -122,7 +123,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video12"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -136,7 +137,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video13"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -144,7 +145,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video14"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -152,7 +153,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video15"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -160,7 +161,7 @@
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video16"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|fill_horizontal"
                 android:layout_weight="1"
                 android:background="@drawable/border" />
@@ -186,7 +187,7 @@
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_call_end_white_48dp" />
+            android:src="@drawable/ic_call_end_white_48dp" />
 
         <Switch
             android:id="@+id/switch_video"
@@ -221,15 +222,26 @@
             app:layout_constraintLeft_toRightOf="@id/switch_audio"
             app:layout_constraintTop_toTopOf="@id/switch_audio" />
 
+        <Switch
+            android:id="@+id/switch_screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:width="100dp"
+            android:checked="false"
+            android:text="Screen"
+            app:layout_constraintLeft_toRightOf="@id/switch_video"
+            app:layout_constraintTop_toTopOf="@id/switch_video" />
+
         <ImageButton
             android:id="@+id/buttonChat"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:background="@color/colorBackground"
-            app:layout_constraintBottom_toBottomOf="@id/switch_video"
-            app:layout_constraintLeft_toRightOf="@id/switch_video"
-            app:layout_constraintTop_toTopOf="@id/switch_video"
+            app:layout_constraintBottom_toBottomOf="@id/switch_speaker"
+            app:layout_constraintLeft_toRightOf="@id/switch_speaker"
+            app:layout_constraintTop_toTopOf="@id/switch_speaker"
             app:srcCompat="@android:drawable/stat_notify_chat" />
 
         <org.webrtc.SurfaceViewRenderer
@@ -241,6 +253,16 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/border"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <org.webrtc.SurfaceViewRenderer
+            android:id="@+id/pip_screen"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/border"
+            app:layout_constraintBottom_toTopOf="@+id/pip_video"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <Spinner
